@@ -19,11 +19,12 @@
 #include "soc/dport_access.h"
 #include "soc/hwcrypto_reg.h"
 
-#if ESP_IDF_VERSION_MAJOR >= 4
-#include "esp_private/periph_ctrl.h"
-#else
 #include "driver/periph_ctrl.h"
-#endif
+// #if ESP_IDF_VERSION_MAJOR >= 4
+// #include "esp_private/periph_ctrl.h"
+// #else
+// #include "driver/periph_ctrl.h"
+// #endif
 
 namespace mycrypto
 {

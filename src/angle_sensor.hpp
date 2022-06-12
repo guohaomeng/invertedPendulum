@@ -1,15 +1,14 @@
 #ifndef ANGLE_SENSOR_H
 #define ANGLE_SENSOR_H
-#include <SimpleFOC.h>
+#include <Arduino.h>
 #include "crc16.hpp"
-
 
 // 角度传感器模式
 enum SENSOR_MODE
 {
-  ASCII,        // 0：ASCII模式
-  MODBUS,       // 1：modbus模式
-  MODBUS_ACTIVE // 2：modbus主动回传模式
+  ASCII,        // 0：ASCII模式，没测试
+  MODBUS,       // 1：modbus模式，就用这个吧
+  MODBUS_ACTIVE // 2：modbus主动回传模式，没有做
 };
 
 class ANGLE_SENSOR
@@ -27,13 +26,13 @@ public:
   SENSOR_MODE set_mode(SENSOR_MODE sensor_mode); // 先实现最基础的角度读取功能，剩下的有需要再加
   int set_id(int id);                            // 设置传感器ID 待做
   int set_prate(int prate);                      // 设置ASCII模式下回传速度 还没做
-  int set_mrate(int mrate);                      // 设置MODBUS模式下回传速度 还没做
+  int set_mrate(int mrate);                      // 设置MODBUS模式下回传速度 还没做，传感器就坏了
   void send_string(char *rec_data, const char *str_command);
   bool send_hex(uint8_t *rec_hex, uint8_t *hex_command); // 返回响应数据rec_hex的CRC校验结果
   uint8_t rec_hex_main[20] = {0};
   uint8_t hex_command_crc[8] = {0};                                      // hex命令长8字节，结构：|ID|CMD|RegH|RegL|LenH|LenL|CRCH|CRCL|，不需要额外的换行与回车
   bool RW_reg(uint8_t id, uint8_t cmd, uint16_t reg_addr, uint16_t len); // 读写寄存器,返回响应数据的CRC校验结果
-  float modbus_getAngle(uint8_t modbus_id);                              // modbus模式下通过读取寄存器获得角度值
+  float modbus_getAngle(uint8_t modbus_id);                              // modbus模式下通过hex命令读取寄存器获得角度值
   float ascii_getAngle(uint8_t modbus_id);                               // ascii模式下通过AT指令获得角度值
 };
 
@@ -104,7 +103,7 @@ void ANGLE_SENSOR::send_string(char *rec_data, const char *str_command)
 }
 
 // 发送16进制命令 hex_command,并返回响应数据到rec_hex
-bool ANGLE_SENSOR::send_hex(uint8_t *rec_hex, uint8_t *hex_command) // 数组名作为参数，会变成指针（4字节），无法用sizeof获取数组长度
+bool ANGLE_SENSOR::send_hex(uint8_t *rec_hex, uint8_t *hex_command) // 数组名作为参数时，会变成指针（4字节），无法用sizeof获取数组长度
 {
   // 首先清空串口
   while (com_port->read() >= 0)

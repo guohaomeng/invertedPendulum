@@ -767,6 +767,20 @@ namespace myWebSocket
         // push websocket client into queue
         this->webSocketClients[index] = webSocketClient;
     }
+    WebSocketClient *CombinedServer::findByID(uint8_t id)
+    {
+        for (uint8_t i = 0; i < MAX_CLIENTS; i++)
+        {
+            if (this->webSocketClients[i] != nullptr)
+            {
+                if (this->webSocketClients[i]->getID() == id)
+                {
+                    return this->webSocketClients[i];
+                }
+            }
+        }
+        return nullptr;
+    }
 
     int CombinedServer::findHttpCallback(String path)
     {

@@ -8,6 +8,7 @@ public:
   void run(char *str);
   void scalar(float *value, char *user_cmd);
   bool isSentinel(char *ch, char *str);
+
 private:
   //订阅的命令回调变量
   CommandCallback call_list[20]; //!< 命令回调指针数组-20是任意数
@@ -35,7 +36,7 @@ void Command::add(char *id, CommandCallback onCommand)
 void Command::scalar(float *value, char *user_cmd)
 {
   *value = atof(user_cmd);
-  Serial.printf("%s\n",user_cmd);
+  Serial.printf("%s\n", user_cmd);
 }
 bool Command::isSentinel(char *ch, char *str)
 {
@@ -47,4 +48,3 @@ bool Command::isSentinel(char *ch, char *str)
   else
     return false;
 }
-

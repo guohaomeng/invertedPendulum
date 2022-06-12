@@ -449,6 +449,10 @@ namespace myWebSocket
 
         // main loop
         void loop();
+
+        // 新加
+        // find specific client
+        WebSocketClient *findByID(uint8_t id);
     };
 } // namespace myWebSocket
 
